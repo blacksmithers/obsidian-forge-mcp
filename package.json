@@ -1,0 +1,24 @@
+{
+  "name": "obsidian-forge-mcp",
+  "version": "1.0.0",
+  "description": "Blazing-fast local MCP server for Obsidian vault operations via stdio",
+  "type": "module",
+  "bin": {
+    "obsidian-forge-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@dagrejs/dagre": "^2.0.4",
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@orama/orama": "^3.1.18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
