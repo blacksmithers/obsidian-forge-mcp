@@ -23,16 +23,16 @@ import { registerFrontmatter, parseFrontmatter, serializeFrontmatter } from "./t
 
 // ── Config ─────────────────────────────────────────────────────────
 
-const VAULT_PATH = process.env.OBSIDIAN_VAULT_PATH;
+const VAULT_PATH = process.env.OBSIDIAN_VAULT_PATH || process.argv[2];
 if (!VAULT_PATH) {
-  console.error("ERROR: Set OBSIDIAN_VAULT_PATH environment variable");
+  console.error("ERROR: Provide vault path as argument or set OBSIDIAN_VAULT_PATH environment variable.\nUsage: obsidian-forge /path/to/vault");
   process.exit(1);
 }
 
 const vault = new VaultIndex(VAULT_PATH);
 const server = new McpServer({
   name: "obsidian-forge",
-  version: "0.3.0",
+  version: "0.3.1",
 });
 
 // ── Helpers ─────────────────────────────────────────────────────────
