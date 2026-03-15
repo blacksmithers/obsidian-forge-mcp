@@ -1,6 +1,6 @@
 {
   "name": "@blacksmithers/obsidian-forge-mcp",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Blazing-fast local MCP server for Obsidian vault operations via stdio",
   "type": "module",
   "bin": {
@@ -17,7 +17,10 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -37,6 +40,9 @@
     "claude",
     "knowledge-management"
   ],
+  "engines": {
+    "node": ">=22"
+  },
   "author": "Solutions Forge LTDA",
   "license": "MIT",
   "dependencies": {
@@ -47,6 +53,7 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.0"
   }
 }

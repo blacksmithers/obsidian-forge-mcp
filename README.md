@@ -2,6 +2,13 @@
   <img src="assets/obsidian-forge-logo.svg" alt="obsidian-forge" width="240" />
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/@blacksmithers/obsidian-forge-mcp"><img src="https://img.shields.io/npm/v/@blacksmithers/obsidian-forge-mcp.svg" alt="npm version" /></a>
+  <a href="https://github.com/blacksmithers/obsidian-forge-mcp/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license" /></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg" alt="node version" /></a>
+  <a href="https://github.com/blacksmithers/obsidian-forge-mcp/actions"><img src="https://github.com/blacksmithers/obsidian-forge-mcp/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+</p>
+
 <h3 align="center">The most capable MCP server for Obsidian.</h3>
 
 <p align="center">
@@ -261,7 +268,7 @@ The vault maps itself.
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) v18+
+- [Node.js](https://nodejs.org/) v22+
 - A folder with Markdown files (Obsidian vault or any structure)
 
 **Obsidian app is not required.** obsidian-forge operates directly on the filesystem. If Obsidian is open, it picks up changes in real time.
@@ -386,6 +393,37 @@ src/
 
 ---
 
+## Roadmap
+
+What's coming next. Ordered by priority — community input shapes the sequence.
+
+### v0.5.0 — Vault Graph & Tags
+- **`vault_graph`** — Export the vault's link graph as a JSON adjacency list. Nodes = files, edges = wikilinks. Enables agents to reason about knowledge structure, find clusters, detect orphans, and identify bridge notes. Output compatible with D3, Cytoscape, or canvas_create for visual rendering.
+- **`tag_search`** — Search by YAML frontmatter tags, separate from content search. Filter by tag combinations (`tag:draft AND tag:specforge`). Returns files with matching tags plus their frontmatter metadata.
+- **`diff_note`** — Compare two notes (or two versions of the same note) and return a structured diff. Useful for agents reviewing changes, merging edits, or auditing vault history.
+
+### v0.6.0 — Template Engine & Smart Create
+- **`template_create`** — Create notes from templates with variable substitution (`{{date}}`, `{{title}}`, `{{tags}}`). Supports custom template folders. The agent describes intent, the tool handles boilerplate.
+- **`smart_create`** — AI-aware note creation. Analyzes vault themes and suggests optimal location, tags, and links for new notes. "Write about X" → creates the note in the right folder with relevant backlinks.
+
+### v0.7.0 — Performance at Scale
+- Large vault optimization (10k+ files) — incremental indexing, lazy loading, memory-mapped file access
+- Parallel batch operations where order independence allows
+- Index compression for faster startup on large vaults
+- Benchmark suite with reproducible performance targets
+
+### v1.0.0 — Stability & Ecosystem
+- Comprehensive test suite with >90% coverage
+- Stable API — no breaking changes without major version bump
+- Plugin ecosystem hooks — allow community extensions
+- Published to MCP registry
+- Obsidian community plugin (optional companion for enhanced integration)
+
+### Community-Driven
+Open an issue tagged `roadmap` to propose features. The most-requested items move up the queue. This is an open forge — the community shapes the steel.
+
+---
+
 ## The Forge is Open
 
 obsidian-forge is the first open-source tool from the **Blacksmithers** — a community of builders who forge tools that build things.
@@ -398,10 +436,11 @@ We don't wrap APIs and call it innovation. We build real engines — BM25 search
 
 Open an issue first to discuss changes. PRs welcome — especially for:
 
-- New language stemmers for smart search
-- Canvas layout algorithms beyond Sugiyama
-- Intelligence tools (backlink analysis, MOC generation, etc.)
+- Semantic similarity search (embedding-based, complementing BM25)
+- Canvas layout algorithms beyond Sugiyama (force-directed, circular)
 - Performance improvements for large vaults (10k+ files)
+- Windows-specific edge cases and path handling
+- New language stemmers for smart search
 
 ### Community
 

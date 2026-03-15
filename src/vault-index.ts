@@ -21,6 +21,19 @@ export interface FileEntry {
   size: number;
 }
 
+export interface DirEntry {
+  /** Path relative to vault root */
+  rel: string;
+  /** Absolute path */
+  abs: string;
+  /** Number of direct children (files + subdirectories) */
+  children_count: number;
+  /** Created timestamp (ms) */
+  ctime: number;
+  /** Last modified timestamp (ms) */
+  mtime: number;
+}
+
 export class VaultIndex {
   /** rel path → FileEntry */
   private files = new Map<string, FileEntry>();
@@ -89,6 +102,60 @@ export class VaultIndex {
     const children = this.byDir.get(norm);
     if (!children) return [];
     return [...children].map((r) => this.files.get(r)!).filter(Boolean);
+  }
+
+  /** List subdirectories of a directory (non-recursive) */
+  listDirEntries(relDir: string): DirEntry[] {
+    const norm = this.normalizePath(relDir) || ".";
+    const prefix = norm === "." ? "" : norm + "/";
+    const results: DirEntry[] = [];
+
+    for (const dirKey of this.byDir.keys()) {
+      // Direct child: starts with prefix and has no further slashes
+      if (prefix === "") {
+        if (dirKey.includes("/")) continue; // not a direct child of root
+      } else {
+        if (!dirKey.startsWith(prefix)) continue;
+        const rest = dirKey.slice(prefix.length);
+        if (rest.includes("/")) continue; // not a direct child
+      }
+      if (dirKey === norm) continue; // skip self
+
+      const fileChildren = this.byDir.get(dirKey)?.size ?? 0;
+      // Count sub-subdirectories
+      const subDirPrefix = dirKey + "/";
+      let subDirs = 0;
+      for (const k of this.byDir.keys()) {
+        if (k.startsWith(subDirPrefix) && !k.slice(subDirPrefix.length).includes("/")) {
+          subDirs++;
+        }
+      }
+
+      const absPath = path.join(this.vaultPath, dirKey);
+      let ctime = 0;
+      let mtime = 0;
+      // Use the earliest ctime and latest mtime from direct file children
+      const children = this.byDir.get(dirKey);
+      if (children) {
+        for (const childRel of children) {
+          const entry = this.files.get(childRel);
+          if (entry) {
+            if (ctime === 0 || entry.ctime < ctime) ctime = entry.ctime;
+            if (entry.mtime > mtime) mtime = entry.mtime;
+          }
+        }
+      }
+
+      results.push({
+        rel: dirKey,
+        abs: absPath,
+        children_count: fileChildren + subDirs,
+        ctime,
+        mtime,
+      });
+    }
+
+    return results;
   }
 
   /** Glob-like search: supports * and ** in patterns */

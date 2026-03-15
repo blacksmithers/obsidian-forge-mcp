@@ -32,7 +32,7 @@ if (!VAULT_PATH) {
 const vault = new VaultIndex(VAULT_PATH);
 const server = new McpServer({
   name: "obsidian-forge",
-  version: "0.3.1",
+  version: "0.4.0",
 });
 
 // ── Helpers ─────────────────────────────────────────────────────────
@@ -253,15 +253,16 @@ server.tool(
 // 7. LIST DIRECTORY
 server.tool(
   "list_dir",
-  "List files in a vault directory. Returns indexed metadata with created/modified timestamps. Sort by name, date, or size.",
+  "List files and directories in a vault directory. Returns indexed metadata with created/modified timestamps. Sort by name, date, or size. Directories listed separately with child counts.",
   {
     path: z.string().default(".").describe("Relative directory path (default: vault root)"),
     recursive: z.boolean().default(false).describe("Include subdirectories recursively"),
-    pattern: z.string().optional().describe("Glob pattern to filter (e.g. '*.md', '**/*.canvas')"),
+    pattern: z.string().optional().describe("Glob pattern to filter files (e.g. '*.md', '**/*.canvas'). Does not filter directories."),
     sort_by: z.enum(["name", "created", "modified", "size"]).default("name").describe("Sort field (default: name)"),
     sort_order: z.enum(["asc", "desc"]).default("asc").describe("Sort order (default: asc)"),
+    include_dirs: z.boolean().default(true).describe("Include subdirectories in response (default: true)"),
   },
-  async ({ path: dirPath, recursive, pattern, sort_by, sort_order }) => {
+  async ({ path: dirPath, recursive, pattern, sort_by, sort_order, include_dirs }) => {
     await vault.waitReady();
 
     let files;
@@ -274,7 +275,7 @@ server.tool(
       files = vault.listDir(dirPath);
     }
 
-    let listing = files.map((f) => ({
+    let fileListing = files.map((f) => ({
       path: f.rel,
       ext: f.ext,
       size: f.size,
@@ -282,8 +283,8 @@ server.tool(
       modified: new Date(f.mtime).toISOString(),
     }));
 
-    // Sort
-    listing.sort((a, b) => {
+    // Sort files
+    fileListing.sort((a, b) => {
       switch (sort_by) {
         case "name":     return a.path.localeCompare(b.path);
         case "created":  return new Date(a.created).getTime() - new Date(b.created).getTime();
@@ -292,13 +293,41 @@ server.tool(
         default:         return 0;
       }
     });
-    if (sort_order === "desc") listing.reverse();
+    if (sort_order === "desc") fileListing.reverse();
+
+    // Build directories listing
+    let dirListing: Array<{ path: string; children_count: number; created: string; modified: string }> = [];
+    if (include_dirs && !recursive) {
+      const dirs = vault.listDirEntries(dirPath);
+      dirListing = dirs.map((d) => ({
+        path: d.rel,
+        children_count: d.children_count,
+        created: d.ctime ? new Date(d.ctime).toISOString() : "",
+        modified: d.mtime ? new Date(d.mtime).toISOString() : "",
+      }));
+
+      // Sort directories
+      dirListing.sort((a, b) => {
+        switch (sort_by) {
+          case "name":     return a.path.localeCompare(b.path);
+          case "created":  return new Date(a.created || 0).getTime() - new Date(b.created || 0).getTime();
+          case "modified": return new Date(a.modified || 0).getTime() - new Date(b.modified || 0).getTime();
+          default:         return 0;
+        }
+      });
+      if (sort_order === "desc") dirListing.reverse();
+    }
 
     return {
       content: [
         {
           type: "text",
-          text: JSON.stringify({ directory: dirPath, count: listing.length, files: listing }, null, 2),
+          text: JSON.stringify({
+            directory: dirPath,
+            count: fileListing.length + dirListing.length,
+            directories: dirListing,
+            files: fileListing,
+          }, null, 2),
         },
       ],
     };
@@ -342,7 +371,7 @@ server.tool(
 // 9. SEARCH CONTENT (grep-like, reads files from disk)
 server.tool(
   "search_content",
-  "Full-text content search across vault files. Reads files from disk. Use search_vault for faster path-only search.",
+  "Full-text content search across vault files. Reads files from disk. Results sorted by match density (most matches first). Use search_vault for faster path-only search.",
   {
     query: z.string().describe("Text to search for (case-insensitive)"),
     extensions: z.array(z.string()).default([".md"]).describe("File extensions to search (default: ['.md'])"),
@@ -353,13 +382,23 @@ server.tool(
     await vault.waitReady();
     const lower = query.toLowerCase();
     const candidates = vault.allFiles().filter((f) => extensions.includes(f.ext));
-    const results: Array<{ path: string; matches: string[] }> = [];
+    const allResults: Array<{ path: string; match_count: number; matches: string[] }> = [];
 
     for (const file of candidates) {
-      if (results.length >= limit) break;
       try {
         const content = await readFile(file.abs, "utf-8");
         if (!content.toLowerCase().includes(lower)) continue;
+
+        // Count total occurrences
+        let matchCount = 0;
+        let searchPos = 0;
+        const contentLower = content.toLowerCase();
+        while (true) {
+          const idx = contentLower.indexOf(lower, searchPos);
+          if (idx === -1) break;
+          matchCount++;
+          searchPos = idx + 1;
+        }
 
         const lines = content.split("\n");
         const matchLines: string[] = [];
@@ -374,11 +413,15 @@ server.tool(
             matchLines.push(snippet);
           }
         }
-        results.push({ path: file.rel, matches: matchLines });
+        allResults.push({ path: file.rel, match_count: matchCount, matches: matchLines });
       } catch {
         // Skip unreadable files
       }
     }
+
+    // Sort by match_count descending, then limit
+    allResults.sort((a, b) => b.match_count - a.match_count);
+    const results = allResults.slice(0, limit);
 
     return {
       content: [
