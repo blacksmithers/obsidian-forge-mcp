@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/obsidian-forge-logo.svg" alt="obsidian-forge" width="420" />
+  <img src="assets/obsidian-forge-logo.svg" alt="obsidian-forge" width="240" />
 </p>
 
 <h3 align="center">The most capable MCP server for Obsidian.</h3>
