@@ -4,20 +4,41 @@
   "description": "Blazing-fast local MCP server for Obsidian vault operations via stdio",
   "type": "module",
   "bin": {
-    "obsidian-forge-mcp": "./dist/index.js"
+    "obsidian-forge": "./dist/index.js"
   },
   "publishConfig": {
     "access": "public"
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blacksmithers/obsidian-forge-mcp.git"
+  },
+  "homepage": "https://github.com/blacksmithers/obsidian-forge-mcp",
+  "keywords": [
+    "obsidian",
+    "mcp",
+    "model-context-protocol",
+    "typescript",
+    "bm25",
+    "search",
+    "canvas",
+    "vault",
+    "ai-agents",
+    "claude",
+    "knowledge-management"
+  ],
+  "author": "Solutions Forge LTDA",
+  "license": "MIT",
   "dependencies": {
     "@dagrejs/dagre": "^2.0.4",
     "@modelcontextprotocol/sdk": "^1.12.1",
