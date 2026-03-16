@@ -12,7 +12,7 @@
 <h3 align="center">The most capable MCP server for Obsidian.</h3>
 
 <p align="center">
-  <strong>25 tools</strong> · Canvas with auto-layout · BM25 smart search · Vault intelligence<br/>
+  <strong>27 tools</strong> · Canvas with auto-layout · BM25 smart search · Vault intelligence<br/>
   No Obsidian plugin required · Works on macOS, Linux, Windows
 </p>
 
@@ -20,7 +20,7 @@
   <a href="#canvas-tools">Canvas</a> ·
   <a href="#smart-search">Search</a> ·
   <a href="#vault-intelligence">Intelligence</a> ·
-  <a href="#all-tools">All 25 Tools</a> ·
+  <a href="#all-tools">All 27 Tools</a> ·
   <a href="#quick-start">Quick Start</a>
 </p>
 
@@ -53,6 +53,7 @@ obsidian-forge does all three.
 | **Batch rename / move with link updates** | ✅ | ❌ | ❌ | ❌ |
 | **Backlink analysis** | ✅ | ❌ | ❌ | ❌ |
 | **Frontmatter as structured data** | ✅ | ❌ | ❌ | ❌ |
+| **Directory management (delete, prune)** | ✅ | ❌ | ❌ | ❌ |
 | No Obsidian plugin required | ✅ | ❌ | ✅ | ❌ |
 
 ---
@@ -213,7 +214,7 @@ The vault maps itself.
 | `edit_note` | In-place find and replace. Exact match, must be unique. |
 | `edit_regex` | Regex find-and-replace. Single file or grep-sub across vault. Capture groups, dry run. |
 | `append_note` | Append to existing, or create if missing. |
-| `delete_note` | Move to `.trash` (safe) or permanent. |
+| `delete_note` | Move to `.trash` (safe) or permanent. Optional `cleanup_empty_parents` removes empty parent dirs. |
 
 ### Search & Discovery (8)
 | Tool | What it does |
@@ -227,10 +228,12 @@ The vault maps itself.
 | `daily_note` | Today's daily note (or any date). |
 | `vault_status` | File counts, types, index health. |
 
-### Files (1)
+### Files (3)
 | Tool | What it does |
 |------|-------------|
 | `batch_rename` | Rename/move files. Explicit pairs or regex patterns. Auto-updates wikilinks. Dry run default. |
+| `delete_folder` | Delete empty or non-empty directories. Moves to `.trash` by default. Safety guards for `.obsidian`, `.git`, `.trash`. |
+| `prune_empty_dirs` | Find and remove all empty directories. Dry run default. Bottom-up pruning handles cascading empty dirs. |
 
 ### Links (2)
 | Tool | What it does |
@@ -260,7 +263,7 @@ The vault maps itself.
 ### Batch (1)
 | Tool | What it does |
 |------|-------------|
-| `batch` | Execute multiple operations — read, write, edit, regex, rename, frontmatter, delete. |
+| `batch` | Execute multiple operations — read, write, edit, regex, rename, frontmatter, delete. Delete ops support `cleanup_empty_parents`. |
 
 ---
 
@@ -364,8 +367,10 @@ src/
 ├── tools/
 │   ├── notes/                  read, write, edit, edit_regex, append, delete
 │   │   └── edit-regex.ts             regex find-and-replace
-│   ├── files/                  rename, move
-│   │   └── batch-rename.ts           rename/move with link updates
+│   ├── files/                  rename, move, directory management
+│   │   ├── batch-rename.ts           rename/move with link updates
+│   │   ├── delete-folder.ts          delete directories with safety guards
+│   │   └── prune-empty-dirs.ts       find and remove empty directories
 │   ├── links/                  wikilink management
 │   │   ├── link-utils.ts             shared wikilink regex engine
 │   │   ├── update-links.ts           fix links after moves
@@ -397,16 +402,16 @@ src/
 
 What's coming next. Ordered by priority — community input shapes the sequence.
 
-### v0.5.0 — Vault Graph & Tags
+### v0.6.0 — Vault Graph & Tags
 - **`vault_graph`** — Export the vault's link graph as a JSON adjacency list. Nodes = files, edges = wikilinks. Enables agents to reason about knowledge structure, find clusters, detect orphans, and identify bridge notes. Output compatible with D3, Cytoscape, or canvas_create for visual rendering.
 - **`tag_search`** — Search by YAML frontmatter tags, separate from content search. Filter by tag combinations (`tag:draft AND tag:specforge`). Returns files with matching tags plus their frontmatter metadata.
 - **`diff_note`** — Compare two notes (or two versions of the same note) and return a structured diff. Useful for agents reviewing changes, merging edits, or auditing vault history.
 
-### v0.6.0 — Template Engine & Smart Create
+### v0.7.0 — Template Engine & Smart Create
 - **`template_create`** — Create notes from templates with variable substitution (`{{date}}`, `{{title}}`, `{{tags}}`). Supports custom template folders. The agent describes intent, the tool handles boilerplate.
 - **`smart_create`** — AI-aware note creation. Analyzes vault themes and suggests optimal location, tags, and links for new notes. "Write about X" → creates the note in the right folder with relevant backlinks.
 
-### v0.7.0 — Performance at Scale
+### v0.8.0 — Performance at Scale
 - Large vault optimization (10k+ files) — incremental indexing, lazy loading, memory-mapped file access
 - Parallel batch operations where order independence allows
 - Index compression for faster startup on large vaults

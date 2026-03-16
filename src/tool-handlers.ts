@@ -3,9 +3,11 @@
  * Each function implements the core logic of an inline tool from index.ts.
  */
 
-import { readFile, writeFile, mkdir, unlink, appendFile } from "node:fs/promises";
+import { readFile, writeFile, mkdir, unlink, appendFile, rmdir } from "node:fs/promises";
 import path from "node:path";
 import type { VaultIndex, FileEntry } from "./vault-index.js";
+
+const PROTECTED_DIRS = new Set([".obsidian", ".obsidian-forge", ".trash", ".git"]);
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
@@ -153,10 +155,45 @@ export async function handleEditNote(
   return ok(`OK: Edited ${resolved.rel} (replaced ${args.old_str.length} → ${args.new_str.length} chars)`);
 }
 
+/**
+ * Walk up from a directory, removing empty parents until hitting a non-empty dir or vault root.
+ * Returns the list of directories removed.
+ */
+export async function cleanupEmptyParents(
+  vault: VaultIndex,
+  vaultPath: string,
+  startDir: string,
+): Promise<string[]> {
+  const removed: string[] = [];
+  let current = startDir.replace(/\\/g, "/").replace(/^\/+/, "").replace(/\/+$/, "");
+
+  while (current && current !== ".") {
+    // Don't touch protected dirs
+    const firstSegment = current.split("/")[0];
+    if (PROTECTED_DIRS.has(firstSegment)) break;
+
+    const absDir = path.join(vaultPath, current);
+    try {
+      // rmdir throws ENOTEMPTY if not empty — use as safety check
+      await rmdir(absDir);
+      vault.removeDir(current);
+      removed.push(current);
+      // Move to parent
+      current = path.dirname(current).replace(/\\/g, "/");
+      if (current === ".") break;
+    } catch {
+      // Not empty or doesn't exist — stop
+      break;
+    }
+  }
+
+  return removed;
+}
+
 export async function handleDeleteNote(
   vault: VaultIndex,
   vaultPath: string,
-  args: { path: string; permanent: boolean },
+  args: { path: string; permanent: boolean; cleanup_empty_parents?: boolean },
 ): Promise<ToolResult> {
   const resolved = resolveOrFail(vault, vaultPath, args.path);
 
@@ -171,7 +208,18 @@ export async function handleDeleteNote(
       await writeFile(trashPath, content, "utf-8");
       await unlink(resolved.abs);
     }
-    return ok(`OK: Deleted ${resolved.rel}${args.permanent ? " (permanent)" : " (moved to .trash)"}`);
+
+    let detail = `OK: Deleted ${resolved.rel}${args.permanent ? " (permanent)" : " (moved to .trash)"}`;
+
+    if (args.cleanup_empty_parents) {
+      const fileDir = path.dirname(resolved.rel).replace(/\\/g, "/");
+      const cleaned = await cleanupEmptyParents(vault, vaultPath, fileDir);
+      if (cleaned.length > 0) {
+        detail += ` | Cleaned ${cleaned.length} empty parent(s): ${cleaned.join(", ")}`;
+      }
+    }
+
+    return ok(detail);
   } catch {
     return err(`ERROR: Could not delete: ${resolved.rel}`);
   }

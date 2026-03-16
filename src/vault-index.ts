@@ -190,6 +190,77 @@ export class VaultIndex {
     return [...this.files.values()];
   }
 
+  /** Check if a directory exists in the index */
+  hasDir(relDir: string): boolean {
+    const norm = this.normalizePath(relDir) || ".";
+    return this.byDir.has(norm);
+  }
+
+  /** Check if a directory is empty (no files and no subdirectories) */
+  isDirEmpty(relDir: string): boolean {
+    const norm = this.normalizePath(relDir) || ".";
+    const children = this.byDir.get(norm);
+    if (!children || children.size > 0) return children ? children.size === 0 : true;
+    // Also check for subdirectories
+    const prefix = norm === "." ? "" : norm + "/";
+    for (const dirKey of this.byDir.keys()) {
+      if (dirKey === norm) continue;
+      if (prefix === "" ? !dirKey.includes("/") : dirKey.startsWith(prefix)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /** Count children (files + direct subdirectories) of a directory */
+  countChildren(relDir: string): number {
+    const norm = this.normalizePath(relDir) || ".";
+    const fileChildren = this.byDir.get(norm)?.size ?? 0;
+    const prefix = norm === "." ? "" : norm + "/";
+    let subDirs = 0;
+    for (const k of this.byDir.keys()) {
+      if (k === norm) continue;
+      if (prefix === "") {
+        if (!k.includes("/")) subDirs++;
+      } else {
+        if (k.startsWith(prefix) && !k.slice(prefix.length).includes("/")) subDirs++;
+      }
+    }
+    return fileChildren + subDirs;
+  }
+
+  /** Remove a directory and all its children from the index */
+  removeDir(relDir: string): { filesRemoved: number; dirsRemoved: number } {
+    const norm = this.normalizePath(relDir) || ".";
+    const prefix = norm + "/";
+    let filesRemoved = 0;
+    let dirsRemoved = 0;
+
+    // Remove all files under this directory (recursively)
+    for (const [rel] of [...this.files]) {
+      if (rel.startsWith(prefix) || this.files.get(rel)?.dir === norm) {
+        this.removeFile(rel);
+        filesRemoved++;
+      }
+    }
+
+    // Remove all subdirectories
+    for (const dirKey of [...this.byDir.keys()]) {
+      if (dirKey.startsWith(prefix)) {
+        this.byDir.delete(dirKey);
+        dirsRemoved++;
+      }
+    }
+
+    // Remove the directory itself
+    if (this.byDir.has(norm)) {
+      this.byDir.delete(norm);
+      dirsRemoved++;
+    }
+
+    return { filesRemoved, dirsRemoved };
+  }
+
   /** Get vault stats */
   stats(): { totalFiles: number; totalDirs: number; extensions: Record<string, number> } {
     const extensions: Record<string, number> = {};

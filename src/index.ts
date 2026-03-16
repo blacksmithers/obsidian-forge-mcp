@@ -17,6 +17,8 @@ import { registerVaultThemes } from "./tools/intelligence/vault-themes.js";
 import { registerVaultSuggest } from "./tools/intelligence/vault-suggest.js";
 import { registerEditRegex } from "./tools/notes/edit-regex.js";
 import { registerBatchRename } from "./tools/files/batch-rename.js";
+import { registerDeleteFolder } from "./tools/files/delete-folder.js";
+import { registerPruneEmptyDirs } from "./tools/files/prune-empty-dirs.js";
 import { registerUpdateLinks, updateWikilinks } from "./tools/links/update-links.js";
 import { registerBacklinks } from "./tools/links/backlinks.js";
 import { registerFrontmatter, parseFrontmatter, serializeFrontmatter } from "./tools/metadata/frontmatter.js";
@@ -32,7 +34,7 @@ if (!VAULT_PATH) {
 const vault = new VaultIndex(VAULT_PATH);
 const server = new McpServer({
   name: "obsidian-forge",
-  version: "0.4.0",
+  version: "0.5.0",
 });
 
 // ── Helpers ─────────────────────────────────────────────────────────
@@ -223,12 +225,13 @@ server.tool(
 // 6. DELETE NOTE
 server.tool(
   "delete_note",
-  "Delete a note from the vault. Moves to .trash by default for safety.",
+  "Delete a note from the vault. Moves to .trash by default for safety. With cleanup_empty_parents, removes empty parent directories after deletion.",
   {
     path: z.string().describe("Relative path or stem of the note"),
     permanent: z.boolean().default(false).describe("Skip trash and delete permanently"),
+    cleanup_empty_parents: z.boolean().default(false).describe("After deleting, walk up and remove empty parent directories until hitting a non-empty parent or vault root"),
   },
-  async ({ path: notePath, permanent }) => {
+  async ({ path: notePath, permanent, cleanup_empty_parents: cleanupParents }) => {
     await vault.waitReady();
     const resolved = resolveOrFail(notePath);
 
@@ -243,7 +246,19 @@ server.tool(
         await writeFile(trashPath, content, "utf-8");
         await unlink(resolved.abs);
       }
-      return { content: [{ type: "text", text: `OK: Deleted ${resolved.rel}${permanent ? " (permanent)" : " (moved to .trash)"}` }] };
+
+      let detail = `OK: Deleted ${resolved.rel}${permanent ? " (permanent)" : " (moved to .trash)"}`;
+
+      if (cleanupParents) {
+        const { cleanupEmptyParents } = await import("./tool-handlers.js");
+        const fileDir = path.dirname(resolved.rel).replace(/\\/g, "/");
+        const cleaned = await cleanupEmptyParents(vault, VAULT_PATH!, fileDir);
+        if (cleaned.length > 0) {
+          detail += ` | Cleaned ${cleaned.length} empty parent(s): ${cleaned.join(", ")}`;
+        }
+      }
+
+      return { content: [{ type: "text", text: detail }] };
     } catch {
       return { content: [{ type: "text", text: `ERROR: Could not delete: ${resolved.rel}` }], isError: true };
     }
@@ -498,6 +513,7 @@ const BatchOpSchema = z.discriminatedUnion("op", [
     op: z.literal("delete"),
     path: z.string(),
     permanent: z.boolean().default(false),
+    cleanup_empty_parents: z.boolean().default(false),
   }),
   z.object({
     op: z.literal("rename"),
@@ -595,7 +611,16 @@ server.tool(
               await writeFile(path.join(trashDir, path.basename(resolved.abs)), c, "utf-8");
               await unlink(resolved.abs);
             }
-            results.push({ index: i, op: "delete", status: "ok", detail: `Deleted: ${resolved.rel}` });
+            let deleteDetail = `Deleted: ${resolved.rel}`;
+            if (op.cleanup_empty_parents) {
+              const { cleanupEmptyParents } = await import("./tool-handlers.js");
+              const fileDir = path.dirname(resolved.rel).replace(/\\/g, "/");
+              const cleaned = await cleanupEmptyParents(vault, VAULT_PATH!, fileDir);
+              if (cleaned.length > 0) {
+                deleteDetail += ` | Cleaned ${cleaned.length} empty parent(s)`;
+              }
+            }
+            results.push({ index: i, op: "delete", status: "ok", detail: deleteDetail });
             break;
           }
           case "rename": {
@@ -754,6 +779,8 @@ registerCanvasRelayout(server, VAULT_PATH!, vault);
 
 registerEditRegex(server, VAULT_PATH!, vault);
 registerBatchRename(server, VAULT_PATH!, vault);
+registerDeleteFolder(server, VAULT_PATH!, vault);
+registerPruneEmptyDirs(server, VAULT_PATH!, vault);
 registerUpdateLinks(server, VAULT_PATH!, vault);
 registerBacklinks(server, VAULT_PATH!, vault);
 registerFrontmatter(server, VAULT_PATH!, vault);

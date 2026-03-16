@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] (0.4.0)
+## [0.5.0] - 2026-03-16
+
+### Added
+- `delete_folder` tool — delete empty or non-empty directories with safety guards (protected paths: `.obsidian`, `.git`, `.trash`, `.obsidian-forge`)
+- `prune_empty_dirs` tool — find and remove all empty directories in vault (dry_run default, bottom-up cascading pruning)
+- `cleanup_empty_parents` option on `delete_note` — auto-remove empty parent dirs after file deletion
+- `cleanup_empty_parents` option on batch delete operations
+- Tests for all directory management tools (unit + integration)
+
+### Changed
+- Tool count: 25 → 27
+
+## [0.4.0] - 2026-03-15
 
 ### Added
 - `list_dir` now returns subdirectories with child counts (`include_dirs` parameter, default: true)
