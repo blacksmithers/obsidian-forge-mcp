@@ -1,6 +1,6 @@
 {
   "name": "@blacksmithers/vaultforge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Blazing-fast local MCP server for Obsidian vault operations via stdio",
   "type": "module",
   "bin": {
@@ -11,6 +11,8 @@
   },
   "files": [
     "dist",
+    "manifest.json",
+    "assets/icon.png",
     "README.md",
     "LICENSE"
   ],

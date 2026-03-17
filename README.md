@@ -21,7 +21,7 @@
   <a href="#smart-search">Search</a> ·
   <a href="#vault-intelligence">Intelligence</a> ·
   <a href="#all-tools">All 27 Tools</a> ·
-  <a href="#quick-start">Quick Start</a>
+  <a href="#install">Install</a>
 </p>
 
 ---
@@ -267,24 +267,64 @@ The vault maps itself.
 
 ---
 
-## Quick Start
+## Install
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) v22+
 - A folder with Markdown files (Obsidian vault or any structure)
+- One of: [Claude Desktop](https://claude.ai/download), [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [VS Code](https://code.visualstudio.com/), [Cursor](https://cursor.com/), [Windsurf](https://windsurf.com/), or any MCP-compatible client
+- [Node.js](https://nodejs.org/) v22+ (not required for `.mcpb` one-click install)
 
 **Obsidian app is not required.** VaultForge operates directly on the filesystem. If Obsidian is open, it picks up changes in real time.
 
-### Install
+### Claude Desktop (one-click)
+
+Download the `.mcpb` file from the [latest release](https://github.com/blacksmithers/vaultforge/releases/latest) and double-click to install:
+
+| Platform | File |
+|----------|------|
+| Windows | `vaultforge.mcpb` |
+| macOS | `vaultforge.mcpb` |
+| Linux | `vaultforge.mcpb` |
+
+Claude Desktop will prompt you for your vault path during installation.
+
+### Claude Code
+
+```bash
+claude mcp add vaultforge -- npx -y @blacksmithers/vaultforge /path/to/your/vault
+```
+
+### VS Code / Cursor / Windsurf
+
+Add to your MCP settings JSON (`.vscode/mcp.json`, `.cursor/mcp.json`, or equivalent):
+
+```json
+{
+  "servers": {
+    "vaultforge": {
+      "command": "npx",
+      "args": ["-y", "@blacksmithers/vaultforge", "/path/to/your/vault"]
+    }
+  }
+}
+```
+
+### Any MCP client
+
+Use this universal pattern — any client that supports MCP stdio transport will work:
+
+- **Command:** `npx`
+- **Args:** `["-y", "@blacksmithers/vaultforge", "/path/to/your/vault"]`
+
+<details>
+<summary>Global install + manual Claude Desktop config</summary>
 
 ```bash
 npm install -g @blacksmithers/vaultforge
 ```
 
-### Configure
-
-**Claude Desktop** — edit `claude_desktop_config.json`:
+Edit `claude_desktop_config.json`:
 
 | OS | Config file location |
 |----|---------------------|
@@ -292,37 +332,18 @@ npm install -g @blacksmithers/vaultforge
 | Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
 | Linux | `~/.config/Claude/claude_desktop_config.json` |
 
-> **Tip (Windows):** press `Win+R`, paste `%APPDATA%\Claude`, hit Enter. The folder opens directly.
-
-macOS / Linux:
 ```json
 {
   "mcpServers": {
     "vaultforge": {
       "command": "vaultforge",
-      "args": ["/Users/you/Documents/MyVault"]
+      "args": ["/path/to/your/vault"]
     }
   }
 }
 ```
 
-Windows:
-```json
-{
-  "mcpServers": {
-    "vaultforge": {
-      "command": "vaultforge",
-      "args": ["C:\\Users\\you\\Documents\\MyVault"]
-    }
-  }
-}
-```
-
-**Claude Code:**
-
-```bash
-claude mcp add vaultforge -- vaultforge /path/to/your/vault
-```
+</details>
 
 ### Verify
 

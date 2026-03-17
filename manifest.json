@@ -1,0 +1,32 @@
+{
+  "manifest_version": "0.3",
+  "name": "@blacksmithers/vaultforge",
+  "version": "1.0.1",
+  "description": "Blazing-fast local MCP server for Obsidian vault operations via stdio",
+  "author": {
+    "name": "Solutions Forge LTDA",
+    "url": "https://solutionsforge.tech"
+  },
+  "icon": "assets/icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["dist/index.js", "${user_config.vault_path}"]
+    }
+  },
+  "user_config": {
+    "vault_path": {
+      "type": "string",
+      "title": "Vault Path",
+      "description": "Absolute path to your Obsidian vault (e.g. /Users/you/Documents/MyVault)",
+      "required": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blacksmithers/vaultforge.git"
+  },
+  "license": "MIT"
+}
