@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-obsidian-forge-mcp is a local MCP (Model Context Protocol) server for Obsidian vault operations. It communicates via stdio transport with Claude Desktop — no HTTP, no network.
+vaultforge is a local MCP (Model Context Protocol) server for Obsidian vault operations. It communicates via stdio transport with Claude Desktop — no HTTP, no network.
 
 ## Commands
 

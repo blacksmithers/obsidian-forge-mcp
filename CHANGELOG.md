@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.5.0] - 2026-03-16
 
 ### Added
-- `delete_folder` tool — delete empty or non-empty directories with safety guards (protected paths: `.obsidian`, `.git`, `.trash`, `.obsidian-forge`)
+- `delete_folder` tool — delete empty or non-empty directories with safety guards (protected paths: `.obsidian`, `.git`, `.trash`, `.vaultforge`)
 - `prune_empty_dirs` tool — find and remove all empty directories in vault (dry_run default, bottom-up cascading pruning)
 - `cleanup_empty_parents` option on `delete_note` — auto-remove empty parent dirs after file deletion
 - `cleanup_empty_parents` option on batch delete operations
@@ -75,4 +75,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vault intelligence: vault_themes (TF-IDF clustering), vault_suggest (reorganization engine)
 - Batch operations, daily notes, vault status
 - In-memory file index with real-time fs.watch sync
-- Persistent search index at `.obsidian-forge/search-index.json`
+- Persistent search index at `.vaultforge/search-index.json`

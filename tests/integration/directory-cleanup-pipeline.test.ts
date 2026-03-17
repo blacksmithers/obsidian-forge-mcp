@@ -47,7 +47,7 @@ describe("Directory cleanup pipeline", () => {
     const pruneResult = await handlePruneEmptyDirs(vault, vaultPath, {
       path: "Projetos",
       dry_run: false,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
 
     const data = parseResult(pruneResult);
@@ -115,7 +115,7 @@ describe("Directory cleanup pipeline", () => {
     const pruneResult = await handlePruneEmptyDirs(vault, vaultPath, {
       path: "cleanup-test",
       dry_run: false,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
 
     const data = parseResult(pruneResult);

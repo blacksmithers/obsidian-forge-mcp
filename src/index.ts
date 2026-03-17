@@ -27,14 +27,14 @@ import { registerFrontmatter, parseFrontmatter, serializeFrontmatter } from "./t
 
 const VAULT_PATH = process.env.OBSIDIAN_VAULT_PATH || process.argv[2];
 if (!VAULT_PATH) {
-  console.error("ERROR: Provide vault path as argument or set OBSIDIAN_VAULT_PATH environment variable.\nUsage: obsidian-forge /path/to/vault");
+  console.error("ERROR: Provide vault path as argument or set OBSIDIAN_VAULT_PATH environment variable.\nUsage: vaultforge /path/to/vault");
   process.exit(1);
 }
 
 const vault = new VaultIndex(VAULT_PATH);
 const server = new McpServer({
-  name: "obsidian-forge",
-  version: "0.5.2",
+  name: "vaultforge",
+  version: "1.0.0",
 });
 
 // ── Helpers ─────────────────────────────────────────────────────────
@@ -795,20 +795,20 @@ registerVaultSuggest(server, VAULT_PATH!, vault);
 // ── Boot ─────────────────────────────────────────────────────────────
 
 async function main() {
-  console.error(`[obsidian-forge] Starting...`);
-  console.error(`[obsidian-forge] Vault: ${VAULT_PATH}`);
+  console.error(`[vaultforge] Starting...`);
+  console.error(`[vaultforge] Vault: ${VAULT_PATH}`);
 
   // Init index in background, server starts immediately
   vault.init().catch((err) => {
-    console.error("[obsidian-forge] Index init failed:", err);
+    console.error("[vaultforge] Index init failed:", err);
   });
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error(`[obsidian-forge] Connected via stdio`);
+  console.error(`[vaultforge] Connected via stdio`);
 }
 
 main().catch((err) => {
-  console.error("[obsidian-forge] Fatal:", err);
+  console.error("[vaultforge] Fatal:", err);
   process.exit(1);
 });

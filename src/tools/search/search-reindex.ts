@@ -18,7 +18,7 @@ export function registerSearchReindex(
     "search_reindex",
     "Force re-index of the vault search index. " +
       "Call after bulk file operations or if search results seem stale. " +
-      "Index is cached at .obsidian-forge/search-index.json.",
+      "Index is cached at .vaultforge/search-index.json.",
     {
       force: z
         .boolean()

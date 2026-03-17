@@ -7,7 +7,7 @@ import { readFile, writeFile, mkdir, unlink, appendFile, rmdir } from "node:fs/p
 import path from "node:path";
 import type { VaultIndex, FileEntry } from "./vault-index.js";
 
-const PROTECTED_DIRS = new Set([".obsidian", ".obsidian-forge", ".trash", ".git"]);
+const PROTECTED_DIRS = new Set([".obsidian", ".vaultforge", ".trash", ".git"]);
 
 // ── Helpers ─────────────────────────────────────────────────────────
 

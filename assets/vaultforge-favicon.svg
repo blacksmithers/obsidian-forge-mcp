@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="au" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5c842"/><stop offset="50%" stop-color="#d4a030"/><stop offset="100%" stop-color="#a67c20"/>
+    </linearGradient>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#1a1508"/><stop offset="100%" stop-color="#12100a"/>
+    </linearGradient>
+    <radialGradient id="amb" cx="50%" cy="50%" r="45%">
+      <stop offset="0%" stop-color="rgba(212,160,48,0.06)"/><stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="gl"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="og" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0.5 0.3 0 0 0  0.3 0.2 0 0 0  0 0 0 0 0  0 0 0 0.15 0" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Vault door -->
+  <rect x="0" y="0" width="64" height="64" rx="14" ry="14" fill="url(#bg)" stroke="rgba(212,160,48,0.35)" stroke-width="2"/>
+  <circle cx="32" cy="32" r="22" fill="url(#amb)"/>
+  <!-- Wheel -->
+  <g transform="translate(32, 32)" filter="url(#og)">
+    <g filter="url(#gl)">
+      <circle cx="0" cy="0" r="21" fill="none" stroke="url(#au)" stroke-width="2.5"/>
+      <line x1="0" y1="-21" x2="0" y2="21" stroke="url(#au)" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+      <line x1="-21" y1="0" x2="21" y2="0" stroke="url(#au)" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+      <line x1="-14.8" y1="-14.8" x2="14.8" y2="14.8" stroke="url(#au)" stroke-width="1.8" stroke-linecap="round" opacity="0.45"/>
+      <line x1="14.8" y1="-14.8" x2="-14.8" y2="14.8" stroke="url(#au)" stroke-width="1.8" stroke-linecap="round" opacity="0.45"/>
+      <!-- Knobs -->
+      <circle cx="0" cy="-21" r="3" fill="url(#au)" opacity="0.6"/>
+      <circle cx="0" cy="21" r="3" fill="url(#au)" opacity="0.6"/>
+      <circle cx="-21" cy="0" r="3" fill="url(#au)" opacity="0.6"/>
+      <circle cx="21" cy="0" r="3" fill="url(#au)" opacity="0.6"/>
+      <!-- Center -->
+      <circle cx="0" cy="0" r="6" fill="url(#au)" opacity="0.8"/>
+      <circle cx="0" cy="0" r="3" fill="#ffe082" opacity="0.5"/>
+    </g>
+    <!-- Bolts -->
+    <circle cx="-24" cy="-24" r="2" fill="#a67c20" opacity="0.4"/>
+    <circle cx="24" cy="-24" r="2" fill="#a67c20" opacity="0.4"/>
+    <circle cx="-24" cy="24" r="2" fill="#a67c20" opacity="0.4"/>
+    <circle cx="24" cy="24" r="2" fill="#a67c20" opacity="0.4"/>
+  </g>
+</svg>

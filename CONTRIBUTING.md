@@ -1,4 +1,4 @@
-# Contributing to obsidian-forge
+# Contributing to VaultForge
 
 ## Before You Start
 
@@ -6,7 +6,7 @@ Open an issue first to discuss your idea. This avoids duplicate work and ensures
 
 ## Development Setup
 
-1. Clone the repo: `git clone https://github.com/blacksmithers/obsidian-forge-mcp.git`
+1. Clone the repo: `git clone https://github.com/blacksmithers/vaultforge.git`
 2. Install dependencies: `npm install`
 3. Build: `npm run build`
 4. Run tests: `npm test`

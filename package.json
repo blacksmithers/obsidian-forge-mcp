@@ -1,10 +1,10 @@
 {
-  "name": "@blacksmithers/obsidian-forge-mcp",
-  "version": "0.5.3",
+  "name": "@blacksmithers/vaultforge",
+  "version": "1.0.0",
   "description": "Blazing-fast local MCP server for Obsidian vault operations via stdio",
   "type": "module",
   "bin": {
-    "obsidian-forge": "./dist/index.js"
+    "vaultforge": "./dist/index.js"
   },
   "publishConfig": {
     "access": "public"
@@ -24,9 +24,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/blacksmithers/obsidian-forge-mcp.git"
+    "url": "https://github.com/blacksmithers/vaultforge.git"
   },
-  "homepage": "https://github.com/blacksmithers/obsidian-forge-mcp",
+  "homepage": "https://github.com/blacksmithers/vaultforge",
   "keywords": [
     "obsidian",
     "mcp",
@@ -38,7 +38,8 @@
     "vault",
     "ai-agents",
     "claude",
-    "knowledge-management"
+    "knowledge-management",
+    "vaultforge"
   ],
   "engines": {
     "node": ">=22"

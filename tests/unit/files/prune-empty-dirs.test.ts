@@ -37,7 +37,7 @@ describe("handlePruneEmptyDirs", () => {
     const result = await handlePruneEmptyDirs(vault, vaultPath, {
       path: ".",
       dry_run: true,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
 
     const data = parseResult(result);
@@ -66,7 +66,7 @@ describe("handlePruneEmptyDirs", () => {
     const result = await handlePruneEmptyDirs(vault, vaultPath, {
       path: ".",
       dry_run: false,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
 
     const data = parseResult(result);
@@ -86,7 +86,7 @@ describe("handlePruneEmptyDirs", () => {
     const result = await handlePruneEmptyDirs(vault, vaultPath, {
       path: ".",
       dry_run: false,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
 
     const data = parseResult(result);
@@ -113,7 +113,7 @@ describe("handlePruneEmptyDirs", () => {
     const result = await handlePruneEmptyDirs(vault, vaultPath, {
       path: ".",
       dry_run: false,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
 
     const data = parseResult(result);
@@ -131,7 +131,7 @@ describe("handlePruneEmptyDirs", () => {
     const result = await handlePruneEmptyDirs(vault, vaultPath, {
       path: ".",
       dry_run: true,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
 
     const data = parseResult(result);
@@ -149,7 +149,7 @@ describe("handlePruneEmptyDirs", () => {
     const dryResult = await handlePruneEmptyDirs(vault, vaultPath, {
       path: ".",
       dry_run: true,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
     const dryData = parseResult(dryResult);
     const dryPaths = dryData.directories.map((d: any) => d.path);
@@ -161,7 +161,7 @@ describe("handlePruneEmptyDirs", () => {
     const result = await handlePruneEmptyDirs(vault, vaultPath, {
       path: ".",
       dry_run: false,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
     const data = parseResult(result);
     expect(data.deleted).toBeGreaterThan(0);
@@ -173,7 +173,7 @@ describe("handlePruneEmptyDirs", () => {
     const result = await handlePruneEmptyDirs(vault, vaultPath, {
       path: ".",
       dry_run: true,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
     const data = parseResult(result);
     const paths = data.directories.map((d: any) => d.path);
@@ -189,7 +189,7 @@ describe("handlePruneEmptyDirs", () => {
     const result = await handlePruneEmptyDirs(vault, vaultPath, {
       path: "scoped",
       dry_run: true,
-      exclude: [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"],
+      exclude: [".obsidian", ".vaultforge", ".trash", ".git", "Templates"],
     });
 
     const data = parseResult(result);

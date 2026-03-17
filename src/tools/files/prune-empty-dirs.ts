@@ -8,7 +8,7 @@ interface ToolResult {
   isError?: boolean;
 }
 
-const DEFAULT_EXCLUDES = [".obsidian", ".obsidian-forge", ".trash", ".git", "Templates"];
+const DEFAULT_EXCLUDES = [".obsidian", ".vaultforge", ".trash", ".git", "Templates"];
 
 export async function handlePruneEmptyDirs(
   vault: VaultIndex,
@@ -124,7 +124,7 @@ export function registerPruneEmptyDirs(
     {
       path: z.string().default(".").describe("Starting directory to scan (default: vault root)"),
       dry_run: z.boolean().default(true).describe("Preview without deleting (default: true). Set false to execute."),
-      exclude: z.array(z.string()).default(DEFAULT_EXCLUDES).describe("Directories to skip (default: .obsidian, .obsidian-forge, .trash, .git, Templates)"),
+      exclude: z.array(z.string()).default(DEFAULT_EXCLUDES).describe("Directories to skip (default: .obsidian, .vaultforge, .trash, .git, Templates)"),
     },
     async ({ path: dirPath, dry_run, exclude }) => {
       await vault.waitReady();

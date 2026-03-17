@@ -15,7 +15,7 @@ import { join, extname, basename } from "node:path";
 import type { VaultIndex } from "../../vault-index.js";
 import { stripMarkdown, extractFrontmatter, extractHeadings } from "./markdown-parser.js";
 
-const CACHE_DIR = ".obsidian-forge";
+const CACHE_DIR = ".vaultforge";
 const CACHE_FILE = "search-index.json";
 const MAX_CONTENT_SIZE = 50 * 1024; // 50KB — truncate for indexing
 

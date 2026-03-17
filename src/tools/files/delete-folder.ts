@@ -8,7 +8,7 @@ interface ToolResult {
   isError?: boolean;
 }
 
-const PROTECTED_DIRS = [".obsidian", ".obsidian-forge", ".trash", ".git"];
+const PROTECTED_DIRS = [".obsidian", ".vaultforge", ".trash", ".git"];
 
 function isProtected(relPath: string): boolean {
   const first = relPath.split("/")[0];

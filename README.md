@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="assets/obsidian-forge-logo.svg" alt="obsidian-forge" width="240" />
+  <img src="assets/vaultforge-logo.svg" alt="VaultForge" width="420" />
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@blacksmithers/obsidian-forge-mcp"><img src="https://img.shields.io/npm/v/@blacksmithers/obsidian-forge-mcp.svg" alt="npm version" /></a>
-  <a href="https://github.com/blacksmithers/obsidian-forge-mcp/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license" /></a>
+  <a href="https://www.npmjs.com/package/@blacksmithers/vaultforge"><img src="https://img.shields.io/npm/v/@blacksmithers/vaultforge.svg" alt="npm version" /></a>
+  <a href="https://github.com/blacksmithers/vaultforge/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license" /></a>
   <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg" alt="node version" /></a>
-  <a href="https://github.com/blacksmithers/obsidian-forge-mcp/actions"><img src="https://github.com/blacksmithers/obsidian-forge-mcp/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://github.com/blacksmithers/vaultforge/actions"><img src="https://github.com/blacksmithers/vaultforge/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
 </p>
 
 <h3 align="center">The most capable MCP server for Obsidian.</h3>
@@ -32,9 +32,9 @@ I checked them all — mcp-obsidian, mcpvault, obsidian-mcp-server, obsidian-mcp
 
 None of them can create a visual diagram. None of them rank search results by relevance. None of them can tell an agent *"here are the 12 themes in this vault and which files belong to which."*
 
-obsidian-forge does all three.
+VaultForge does all three.
 
-| Feature | obsidian-forge | mcp-obsidian | mcpvault | obsidian-mcp-server |
+| Feature | VaultForge | mcp-obsidian | mcpvault | obsidian-mcp-server |
 |---------|:-:|:-:|:-:|:-:|
 | Read / Write / Delete notes | ✅ | ✅ | ✅ | ✅ |
 | Full-text search | ✅ | ✅ | ✅ | ✅ |
@@ -60,9 +60,9 @@ obsidian-forge does all three.
 
 ## Fewer Tokens. Same Intelligence.
 
-The other Obsidian MCPs weren't designed for AI agents — they were designed for humans who happen to use AI. Every tool returns raw, verbose data that burns through context windows. obsidian-forge is **AI-infrastructure**: every response is shaped to minimize token consumption while maximizing semantic density.
+The other Obsidian MCPs weren't designed for AI agents — they were designed for humans who happen to use AI. Every tool returns raw, verbose data that burns through context windows. VaultForge is **AI-infrastructure**: every response is shaped to minimize token consumption while maximizing semantic density.
 
-| Operation | Traditional MCP | obsidian-forge | Savings |
+| Operation | Traditional MCP | VaultForge | Savings |
 |---|---|---|---|
 | Read a canvas | Raw JSON — coordinates, hex IDs, pixel dimensions | Semantic graph: labels + connections only | ~70-80% fewer tokens |
 | Search vault | Unranked grep dump — agent reads 50 results to find 3 | BM25-ranked top results with relevance scores | ~90% fewer tokens |
@@ -78,7 +78,7 @@ Tokens = API cost, context window space, and latency. Fewer tokens means faster,
 
 > The agent thinks in graphs. The tool thinks in pixels.
 
-AI agents create, read, modify, and re-layout [JSON Canvas](https://jsoncanvas.org/) files without touching a single coordinate. The agent describes a semantic graph. obsidian-forge calculates all geometry using [dagre](https://github.com/dagrejs/dagre) — the same Sugiyama layout engine behind Mermaid and React Flow.
+AI agents create, read, modify, and re-layout [JSON Canvas](https://jsoncanvas.org/) files without touching a single coordinate. The agent describes a semantic graph. VaultForge calculates all geometry using [dagre](https://github.com/dagrejs/dagre) — the same Sugiyama layout engine behind Mermaid and React Flow.
 
 **canvas_create** — describe nodes and edges, get a fully laid-out `.canvas` file:
 
@@ -141,7 +141,7 @@ Unranked grep forces the agent to consume every result to find relevance. BM25 p
 
 **Field boosting:** title (3×) > tags (2.5×) > headings (2×) > content (1×).
 
-**Persistent index** at `.obsidian-forge/search-index.json` — survives restarts.
+**Persistent index** at `.vaultforge/search-index.json` — survives restarts.
 
 ---
 
@@ -274,12 +274,12 @@ The vault maps itself.
 - [Node.js](https://nodejs.org/) v22+
 - A folder with Markdown files (Obsidian vault or any structure)
 
-**Obsidian app is not required.** obsidian-forge operates directly on the filesystem. If Obsidian is open, it picks up changes in real time.
+**Obsidian app is not required.** VaultForge operates directly on the filesystem. If Obsidian is open, it picks up changes in real time.
 
 ### Install
 
 ```bash
-npm install -g @blacksmithers/obsidian-forge-mcp
+npm install -g @blacksmithers/vaultforge
 ```
 
 ### Configure
@@ -298,8 +298,8 @@ macOS / Linux:
 ```json
 {
   "mcpServers": {
-    "obsidian-forge": {
-      "command": "obsidian-forge",
+    "vaultforge": {
+      "command": "vaultforge",
       "args": ["/Users/you/Documents/MyVault"]
     }
   }
@@ -310,8 +310,8 @@ Windows:
 ```json
 {
   "mcpServers": {
-    "obsidian-forge": {
-      "command": "obsidian-forge",
+    "vaultforge": {
+      "command": "vaultforge",
       "args": ["C:\\Users\\you\\Documents\\MyVault"]
     }
   }
@@ -321,7 +321,7 @@ Windows:
 **Claude Code:**
 
 ```bash
-claude mcp add obsidian-forge -- obsidian-forge /path/to/your/vault
+claude mcp add vaultforge -- vaultforge /path/to/your/vault
 ```
 
 ### Verify
@@ -431,7 +431,7 @@ Open an issue tagged `roadmap` to propose features. The most-requested items mov
 
 ## The Forge is Open
 
-obsidian-forge is the first open-source tool from the **Blacksmithers** — a community of builders who forge tools that build things.
+VaultForge is the first open-source tool from the **Blacksmithers** — a community of builders who forge tools that build things.
 
 We don't wrap APIs and call it innovation. We build real engines — BM25 search, graph layout, TF-IDF clustering — because the tools AI agents use should be as rigorous as the agents themselves.
 

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 64" width="360" height="64">
+  <defs>
+    <linearGradient id="au" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5c842"/><stop offset="50%" stop-color="#d4a030"/><stop offset="100%" stop-color="#a67c20"/>
+    </linearGradient>
+    <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d4a030"/><stop offset="60%" stop-color="#f5c842"/><stop offset="100%" stop-color="#ffe082"/>
+    </linearGradient>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#1a1508"/><stop offset="100%" stop-color="#12100a"/>
+    </linearGradient>
+    <filter id="gl"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="ig" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0.5 0.3 0 0 0  0.3 0.2 0 0 0  0 0 0 0 0  0 0 0 0.2 0" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@900&amp;display=swap');</style>
+  </defs>
+  <!-- THE VAULT DOOR (box = door, wheel = handle) -->
+  <g transform="translate(32, 32)" filter="url(#ig)">
+    <!-- Vault door surface -->
+    <rect x="-32" y="-32" width="64" height="64" rx="14" ry="14" fill="url(#bg)" stroke="rgba(212,160,48,0.35)" stroke-width="2"/>
+    <!-- Vault wheel/timão centered -->
+    <g filter="url(#gl)">
+      <!-- Outer ring -->
+      <circle cx="0" cy="0" r="18" fill="none" stroke="url(#au)" stroke-width="2.2"/>
+      <!-- Spokes (the handle bars you grab to turn) -->
+      <line x1="0" y1="-18" x2="0" y2="18" stroke="url(#au)" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      <line x1="-18" y1="0" x2="18" y2="0" stroke="url(#au)" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      <line x1="-12.7" y1="-12.7" x2="12.7" y2="12.7" stroke="url(#au)" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+      <line x1="12.7" y1="-12.7" x2="-12.7" y2="12.7" stroke="url(#au)" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+      <!-- Spoke end knobs -->
+      <circle cx="0" cy="-18" r="2.5" fill="url(#au)" opacity="0.6"/>
+      <circle cx="0" cy="18" r="2.5" fill="url(#au)" opacity="0.6"/>
+      <circle cx="-18" cy="0" r="2.5" fill="url(#au)" opacity="0.6"/>
+      <circle cx="18" cy="0" r="2.5" fill="url(#au)" opacity="0.6"/>
+      <!-- Center hub -->
+      <circle cx="0" cy="0" r="5" fill="url(#au)" opacity="0.8"/>
+      <circle cx="0" cy="0" r="2.5" fill="#ffe082" opacity="0.5"/>
+    </g>
+    <!-- Bolt dots on the door corners (vault door detail) -->
+    <circle cx="-22" cy="-22" r="1.5" fill="#a67c20" opacity="0.4"/>
+    <circle cx="22" cy="-22" r="1.5" fill="#a67c20" opacity="0.4"/>
+    <circle cx="-22" cy="22" r="1.5" fill="#a67c20" opacity="0.4"/>
+    <circle cx="22" cy="22" r="1.5" fill="#a67c20" opacity="0.4"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="78" y="45" font-family="'Outfit', sans-serif" font-weight="900" font-size="46" letter-spacing="-2">
+    <tspan fill="#f0f0f0">Vault</tspan><tspan fill="url(#wg)">Forge</tspan>
+  </text>
+</svg>

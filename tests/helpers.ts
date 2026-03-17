@@ -6,7 +6,7 @@ import { VaultIndex } from "../src/vault-index.js";
 const FIXTURE_VAULT = path.join(import.meta.dirname, "fixtures", "test-vault");
 
 export async function createTempVault(): Promise<string> {
-  const tempDir = await mkdtemp(path.join(tmpdir(), "obsidian-forge-test-"));
+  const tempDir = await mkdtemp(path.join(tmpdir(), "vaultforge-test-"));
   await cp(FIXTURE_VAULT, tempDir, { recursive: true });
   return tempDir;
 }
