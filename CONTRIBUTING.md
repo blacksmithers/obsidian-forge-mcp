@@ -62,14 +62,38 @@ Every tool gets its own test file. Every test file covers: happy path, edge case
 
 Minimum coverage targets: 80% line coverage, 90% branch coverage on critical paths.
 
+## Commit Messages
+
+We use [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` — new feature (e.g., `feat: add vault_themes tool`)
+- `fix:` — bug fix (e.g., `fix: handle Unicode filenames on Windows`)
+- `docs:` — documentation only (e.g., `docs: update canvas tool examples`)
+- `refactor:` — code change that neither fixes a bug nor adds a feature
+
+## Manual Testing with MCP Inspector
+
+Use the MCP Inspector to interactively test tools against a real vault:
+
+```bash
+npm run inspect -- /path/to/vault
+```
+
+This launches the Inspector UI with VaultForge connected via stdio.
+
+## Logging
+
+All logging must go to **stderr** — never use `console.log`. Stdout is reserved for MCP protocol messages over stdio. Use `console.error` or `process.stderr.write` instead.
+
 ## Pull Request Process
 
 1. Branch from `main`
 2. All tests pass: `npm test`
 3. Build succeeds: `npm run build`
 4. No type errors: `npx tsc --noEmit`
-5. Update CHANGELOG.md under `[Unreleased]`
-6. PR description explains WHAT changed and WHY
+5. **CI must pass** before the PR will be reviewed
+6. Update CHANGELOG.md under `[Unreleased]`
+7. PR description explains WHAT changed and WHY
 
 ## Areas We'd Love Help With
 
@@ -78,3 +102,7 @@ Minimum coverage targets: 80% line coverage, 90% branch coverage on critical pat
 - Performance optimization for large vaults (10k+ files)
 - Windows-specific edge cases (path separators, long paths, Unicode)
 - Vault intelligence improvements (semantic similarity, tag-based clustering)
+
+## Code of Conduct
+
+This project follows the [Contributor Covenant v2.1](CODE_OF_CONDUCT.md). By participating, you agree to uphold its standards.

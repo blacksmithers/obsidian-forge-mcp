@@ -1,0 +1,68 @@
+name: Bug Report
+description: Report a bug in VaultForge
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear description of the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Configure VaultForge with...
+        2. Call the tool...
+        3. Observe...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual behavior
+      description: What did you expect to happen, and what actually happened?
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Windows
+        - Linux
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node version
+      description: Output of `node --version`
+      placeholder: v22.0.0
+
+  - type: input
+    id: vaultforge-version
+    attributes:
+      label: VaultForge version
+      description: Output of `npm ls @blacksmithers/vaultforge` or check package.json
+      placeholder: 1.0.2
+
+  - type: input
+    id: vault-size
+    attributes:
+      label: Vault size
+      description: Approximate number of files in your vault
+      placeholder: "~500 files"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Paste any relevant log output here.
+      render: shell
